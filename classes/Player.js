@@ -33,15 +33,14 @@ class Player {
         this.material = 'air',
         this.lastDirection = 'right'
         this.bounceThreshold = {
-            y: 20
+            y: 30
         }
-        this.isAttacking = false
+        this.canAttack = true
         this.interp = interp
+        this.multiplier = 1
     }
 
     update() {
-        this.updateHitbox()
-
         // Drawing a rectangle to show where our hitbox is
         c.fillStyle = this.color
         c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height)
@@ -54,6 +53,8 @@ class Player {
         this.updateHitbox() // Our hitbox values should be up to date before we check for vertical or horizontal collisions
         this.checkMaterial()
         this.checkForVerticalCollisions()
+
+        this.updateHitbox()
     }
 
     updateHitbox() {
@@ -139,7 +140,7 @@ class Player {
                     // Setting the position of the hitbox to to the bottom of the block (plus a small buffer)
                     this.position.y = collisionBlock.position.y + collisionBlock.height - offset + 0.01
 
-                    if (this.velocity.y > this.bounceThreshold.y) {
+                    if (this.velocity.y > -this.bounceThreshold.y) {
                         this.velocity.y *= -0.5
                     } else {
                         this.velocity.y = 0
@@ -189,8 +190,12 @@ class Player {
                 })
             ) {
                 if (attack.player != this) {
-                    this.velocity.x = this.interp.update(((this.position.x + this.hitbox.width / 2) - (attack.player.position.x + attack.player.hitbox.width / 2)) * attack.multiplier)
-                    this.velocity.y = -5 * attack.multiplier
+                    attack.attackRegistered = true
+                    let xDirection = Math.sign((this.position.x + this.hitbox.width / 2) - (attack.player.position.x + attack.player.hitbox.width / 2))
+                    let yDirection = Math.sign((this.position.y + this.hitbox.height / 2.1) - (attack.player.position.y + attack.player.hitbox.height / 2))
+                    this.velocity.x = this.interp.update(xDirection * attack.multiplier.x * this.multiplier)
+                    this.velocity.y = yDirection * attack.multiplier.y * this.multiplier
+                    this.multiplier += (attack.multiplier.x + attack.multiplier.y) / 2 * this.multiplier * globalMultiplier
                 }
             }
         })
@@ -248,6 +253,10 @@ class Player {
         // + "\n respawnY: " + this.respawnPosition.y.toFixed(2)
         + "\n playerY: " + this.position.y.toFixed(2)
         + "\n playerX: " + this.position.x.toFixed(2)
+    }
+
+    displayPercent({id}) {
+        document.getElementById(id).innerHTML = ((this.multiplier - 1) * 100).toFixed(1) + "%"
     }
 
 }

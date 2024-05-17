@@ -30,3 +30,37 @@ canvas {
     opacity: 50%;
     z-index: 100;
 }
+
+#stats2 {
+    font-size: 1vw;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10vw;
+    height: 10vw;
+    padding: 0.5vw 1vw;
+    white-space: pre-line;
+    opacity: 50%;
+    z-index: 100;
+}
+
+h3 {
+    font-size: 5vw;
+    line-height: 0vw;
+}
+
+.player-info {
+    display: block;
+    position: absolute;
+    top: 75%;
+    justify-content: center;
+    text-align: center;
+}
+
+#p1 {
+    left: 20%;
+}
+
+#p2 {
+    left: 70%;
+}

@@ -7,8 +7,9 @@ canvas.height = document.documentElement.clientHeight
 console.log("Canvas width: " + canvas.width + " Canvas height: " + canvas.height)
 
 // Game constants
-const gravity = 0.5
-const jumpHeight = 7 / gravity;
+const gravity = 0.7
+const jumpHeight = 12 / gravity;
+const globalMultiplier = 0.005 // How much the percent goes up by
 const friction = { // Lowering these values makes it more "slippery"
     ground: 0.15,
     air: 0.05, // Might raise this?
@@ -19,7 +20,13 @@ const tileHeight = tileWidth
 
 // User input
 const keys = {
+    w: {
+        pressed: false
+    },
     a: {
+        pressed: false
+    },
+    s: {
         pressed: false
     },
     d: {
@@ -31,7 +38,13 @@ const keys = {
     t: {
         pressed: false
     },
+    upArrow: {
+        pressed: false
+    },
     leftArrow: {
+        pressed: false
+    },
+    downArrow: {
         pressed: false
     },
     rightArrow: {
@@ -89,7 +102,7 @@ const p1 = new Player({
     },
     collisionBlocks: collisionBlocks,
     platformCollisionBlocks: platformCollisionBlocks,
-    color: "rgba(255, 0, 0, 1)",
+    color: "rgba(255, 0, 0, 0.8)",
     interp: p1TransInterp,
 })
 
@@ -101,7 +114,7 @@ const p2 = new Player({
     },
     collisionBlocks: collisionBlocks,
     platformCollisionBlocks: platformCollisionBlocks,
-    color: "rgba(0, 0, 255, 1)",
+    color: "rgba(0, 0, 255, 0.8)",
     interp: p2TransInterp,
 })
 
@@ -143,7 +156,13 @@ function animate() {
     p1.checkHurtCollision({activeAttacks: activeAttacks})
     p2.checkHurtCollision({activeAttacks: activeAttacks})
 
+    // Display text
     p1.displayStats({id: "stats1"})
+    p2.displayStats({id: "stats2"})
+
+    p1.displayPercent({id: "p1-percent"})
+    p2.displayPercent({id: "p2-percent"})
+
 
     // Handling user input for movement
     if (keys.a.pressed) {
@@ -188,26 +207,26 @@ function animate() {
     console.log(activeAttacks)
     // User input for attacks
     // TO DO: Figure out how to remove past attacks
-    if (keys.r.pressed && !p1.isAttacking) {
-        activeAttacks.push(new HurtBox({
-            player: p1,
-            width: 50,
-            height: 50,
-            frames: {duration: 10, cooldown: 30},
-            multiplier: 2,
-        }))
+    if (keys.r.pressed && (keys.a.pressed || keys.d.pressed) && p1.canAttack) {
+        character1.horiNormal({p: p1})
+    } else if (keys.r.pressed && keys.w.pressed && p1.canAttack) {
+        character1.upNormal({p: p1})
+    } else if (keys.r.pressed && keys.s.pressed && p1.canAttack) {
+        character1.downNormal({p: p1})
+    } else if (keys.r.pressed && p1.canAttack) { // Order matters, neutral attacks should be last
+        character1.neutralNormal({p: p1})
     }
 
-    if (keys.m.pressed && !p2.isAttacking) {
-        activeAttacks.push(new HurtBox({
-            player: p2,
-            width: 50,
-            height: 50,
-            frames: {duration: 10, cooldown: 30},
-            multiplier: 2,
-        }))
+    if (keys.m.pressed && (keys.leftArrow.pressed || keys.rightArrow.pressed) && p2.canAttack) {
+        character1.horiNormal({p: p2})
+    } else if (keys.m.pressed && keys.upArrow.pressed && p2.canAttack) {
+        character1.upNormal({p: p2})
+    } else if (keys.m.pressed && keys.downArrow.pressed && p2.canAttack) {
+        character1.downNormal({p: p2})
+    } else if (keys.m.pressed && p2.canAttack) { // Order matters, neutral attacks should be last
+        character1.neutralNormal({p: p2})
     }
-
+    
     c.restore()
 }
 
@@ -216,29 +235,38 @@ animate() // !!!
 // Listen for whether a specific key is being pressed, then set that key's pressed attribute to true
 window.addEventListener('keydown', (event) => {
     switch (event.key) {
+        case 'w':
+            p1.jump({jumpHeight: jumpHeight})
+            keys.w.pressed = true
+            break
         case 'a':
             keys.a.pressed = true
             break
+        case 's':
+            keys.s.pressed = true
+            break
         case 'd':
             keys.d.pressed = true
-            break
-        case 'w':
-            p1.jump({jumpHeight: jumpHeight})
             break
         case 'r':
             keys.r.pressed = true
             break
         case 't':
-            keys.r.pressed = true
+            keys.t.pressed = true
+            break
+        case 'ArrowUp':
+            p2.jump({jumpHeight: jumpHeight})
+            keys.upArrow.pressed = true
             break
         case 'ArrowLeft':
             keys.leftArrow.pressed = true
             break
+        case 'ArrowDown':
+            keys.downArrow.pressed = true
+            break
         case 'ArrowRight':
             keys.rightArrow.pressed = true
             break
-        case 'ArrowUp':
-            p2.jump({jumpHeight: jumpHeight})
         case 'm':
             keys.m.pressed = true
             break
@@ -251,20 +279,33 @@ window.addEventListener('keydown', (event) => {
 // Listen for whether a specific key is not being pressed, then set that key's pressed attribute to false
 window.addEventListener('keyup', (event) => {
     switch (event.key) {
-        case 'd':
-            keys.d.pressed = false
+        case 'w':
+            p1.jump({jumpHeight: jumpHeight})
+            keys.w.pressed = false
             break
         case 'a':
             keys.a.pressed = false
+            break
+        case 's':
+            keys.s.pressed = false
+            break
+        case 'd':
+            keys.d.pressed = false
             break
         case 'r':
             keys.r.pressed = false
             break
         case 't':
-            keys.r.pressed = false
+            keys.t.pressed = false
+            break
+        case 'ArrowUp':
+            keys.upArrow.pressed = false
             break
         case 'ArrowLeft':
             keys.leftArrow.pressed = false
+            break
+        case 'ArrowDown':
+            keys.downArrow.pressed = false
             break
         case 'ArrowRight':
             keys.rightArrow.pressed = false
