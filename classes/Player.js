@@ -28,7 +28,7 @@ class Player {
         this.color = color
         this.jumps = { // Change for double jump or triple jump
             num: 1,
-            max: 1,
+            max: 2,
         }
         this.material = 'air',
         this.lastDirection = 'right'
@@ -195,7 +195,7 @@ class Player {
                     let yDirection = Math.sign((this.position.y + this.hitbox.height / 2.1) - (attack.player.position.y + attack.player.hitbox.height / 2))
                     this.velocity.x = this.interp.update(xDirection * attack.multiplier.x * this.multiplier)
                     this.velocity.y = yDirection * attack.multiplier.y * this.multiplier
-                    this.multiplier += (attack.multiplier.x + attack.multiplier.y) / 2 * this.multiplier * globalMultiplier
+                    this.multiplier += (attack.multiplier.x + attack.multiplier.y) / 2 * attack.multiplier.percent * this.multiplier * globalMultiplier
                 }
             }
         })
@@ -204,7 +204,6 @@ class Player {
     checkMaterial() {
         // If it's not any material, it's probably air
         this.material = 'air'
-        this.jumps.num = 0
 
         for (let i = 0; i < this.collisionBlocks.length; i++) {
             const collisionBlock = this.collisionBlocks[i]
@@ -237,7 +236,7 @@ class Player {
     }
 
     jump({jumpHeight}) {
-        if (this.jumps.num > 0)
+        if (this.jumps.num > 0 && this.velocity.y >= 0)
         {
             this.velocity.y = -jumpHeight
             this.jumps.num--

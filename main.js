@@ -12,7 +12,7 @@ const jumpHeight = 20 / gravity;
 const globalMultiplier = 0.005 // How much the percent goes up by
 const friction = { // Lowering these values makes it more "slippery"
     ground: 0.2,
-    air: 0.05, // Might raise this?
+    air: 0.1, // Might raise this?
 }
 const playerSpeed = 8
 
@@ -86,7 +86,7 @@ platformCollisions2D.forEach((row, y) => {
                     y: y * tileHeight,
                 },
                 color: 'rgba(0, 255, 0, 0.3)',
-                height: tileHeight * 3/4, // Platform collision blocks are slimmer than normal blocks (just to visually show their difference)
+                height: tileHeight * 1, // Platform collision blocks are slimmer than normal blocks (just to visually show their difference)
             }))
         }
     })
@@ -98,7 +98,7 @@ const p2TransInterp = new Ewma(friction.ground)
 
 const p1 = new Player({
     position: {
-        x: 700,
+        x: canvas.width * 1 / 3,
         y: 0,
     },
     collisionBlocks: collisionBlocks,
@@ -110,7 +110,7 @@ const p1 = new Player({
 
 const p2 = new Player({
     position: {
-        x: 1200,
+        x: canvas.width * 2 / 3 - p1.hitbox.width,
         y: 0,
     },
     collisionBlocks: collisionBlocks,
@@ -119,7 +119,7 @@ const p2 = new Player({
     interp: p2TransInterp,
 })
 
-const players = [p1, p2]
+const players = [p2]
 
 // Store active attacks that each player will iterate through every frame
 let activeAttacks = []
@@ -206,26 +206,47 @@ function animate() {
     }
 
     console.log(activeAttacks)
+
     // User input for attacks
     // TO DO: Figure out how to remove past attacks
     if (keys.r.pressed && (keys.a.pressed || keys.d.pressed) && p1.canAttack) {
-        character1.horiNormal({p: p1})
+        character1.horiBasic({p: p1})
     } else if (keys.r.pressed && keys.w.pressed && p1.canAttack) {
-        character1.upNormal({p: p1})
+        character1.upBasic({p: p1})
     } else if (keys.r.pressed && keys.s.pressed && p1.canAttack) {
-        character1.downNormal({p: p1})
+        character1.downBasic({p: p1})
     } else if (keys.r.pressed && p1.canAttack) { // Order matters, neutral attacks should be last
-        character1.neutralNormal({p: p1})
+        character1.neutralBasic({p: p1})
+    }
+
+    if (keys.t.pressed && keys.w.pressed && p1.canAttack) {
+        character1.upSpecial({p: p1})
+    } else if (keys.t.pressed && (keys.a.pressed || keys.d.pressed) && p1.canAttack) {
+        character1.horiSpecial({p: p1})
+    } else if (keys.t.pressed && keys.s.pressed && p1.canAttack) {
+        character1.downSpecial({p: p1})
+    } else if (keys.t.pressed && p1.canAttack) { // Order matters, neutral attacks should be last
+        character1.neutralSpecial({p: p1})
     }
 
     if (keys.m.pressed && (keys.leftArrow.pressed || keys.rightArrow.pressed) && p2.canAttack) {
-        character1.horiNormal({p: p2})
+        character1.horiBasic({p: p2})
     } else if (keys.m.pressed && keys.upArrow.pressed && p2.canAttack) {
-        character1.upNormal({p: p2})
+        character1.upBasic({p: p2})
     } else if (keys.m.pressed && keys.downArrow.pressed && p2.canAttack) {
-        character1.downNormal({p: p2})
+        character1.downBasic({p: p2})
     } else if (keys.m.pressed && p2.canAttack) { // Order matters, neutral attacks should be last
-        character1.neutralNormal({p: p2})
+        character1.neutralBasic({p: p2})
+    }
+
+    if (keys.n.pressed && keys.upArrow.pressed && p2.canAttack) {
+        character1.upSpecial({p: p2})
+    } else if (keys.n.pressed && (keys.leftArrow.pressed || keys.rightArrow.pressed) && p2.canAttack) {
+        character1.horiSpecial({p: p2})
+    } else if (keys.n.pressed && keys.downArrow.pressed && p2.canAttack) {
+        character1.downSpecial({p: p2})
+    } else if (keys.n.pressed && p2.canAttack) { // Order matters, neutral attacks should be last
+        character1.neutralSpecial({p: p2})
     }
     
     c.restore()

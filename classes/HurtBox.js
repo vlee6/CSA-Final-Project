@@ -18,7 +18,7 @@ class HurtBox {
         this.elapsedFrames = 0
         this.multiplier = multiplier
         this.offset = offset
-        this.attackRegistered = false
+        this.attackRegistered = false // If an attack is already registered, it shouldn't do damage again
     }
 
     update()
@@ -34,8 +34,7 @@ class HurtBox {
                     this.position.x = this.player.position.x - (this.width - this.player.hitbox.width) - (this.player.hitbox.width * this.offset.x) // Some very confusing math to mirror the attack
                     break
             }
-            c.fillStyle = 'rgba(255, 0, 0, 0.5)'
-            c.fillRect(this.position.x, this.position.y, this.width, this.height)
+            this.draw()
         } else {
             this.position.y = -99999 // Obscuring the hurtbox once the attack is over (probably gonna be an issue later)
             if (this.elapsedFrames > this.frames.cooldown + this.frames.duration + this.frames.delay) {
@@ -43,6 +42,11 @@ class HurtBox {
             }
         }
         this.elapsedFrames++
+    }
+
+    draw() {
+        c.fillStyle = 'rgba(255, 0, 0, 0.5)'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 
 
