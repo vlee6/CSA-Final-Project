@@ -28,7 +28,7 @@ class Player {
         this.color = color
         this.jumps = { // Change for double jump or triple jump
             num: 1,
-            max: 2,
+            max: 1,
         }
         this.material = 'air',
         this.lastDirection = 'right'
@@ -204,6 +204,7 @@ class Player {
     checkMaterial() {
         // If it's not any material, it's probably air
         this.material = 'air'
+        this.jumps.num = 0
 
         for (let i = 0; i < this.collisionBlocks.length; i++) {
             const collisionBlock = this.collisionBlocks[i]

@@ -7,13 +7,14 @@ canvas.height = document.documentElement.clientHeight
 console.log("Canvas width: " + canvas.width + " Canvas height: " + canvas.height)
 
 // Game constants
-const gravity = 0.7
-const jumpHeight = 12 / gravity;
+const gravity = 1
+const jumpHeight = 20 / gravity;
 const globalMultiplier = 0.005 // How much the percent goes up by
 const friction = { // Lowering these values makes it more "slippery"
-    ground: 0.15,
+    ground: 0.2,
     air: 0.05, // Might raise this?
 }
+const playerSpeed = 8
 
 const tileWidth = canvas.width / rowLength
 const tileHeight = tileWidth
@@ -166,20 +167,20 @@ function animate() {
 
     // Handling user input for movement
     if (keys.a.pressed) {
-        p1.velocity.x = p1.interp.update(-5);
+        p1.velocity.x = p1.interp.update(-playerSpeed);
         p1.lastDirection = 'left'
     } else if (keys.d.pressed) {
-        p1.velocity.x = p1.interp.update(5);
+        p1.velocity.x = p1.interp.update(playerSpeed);
         p1.lastDirection = 'right'
     } else {
         p1.velocity.x = p1.interp.update(0);
     }
 
     if (keys.leftArrow.pressed) {
-        p2.velocity.x = p2.interp.update(-5);
+        p2.velocity.x = p2.interp.update(-playerSpeed);
         p2.lastDirection = 'left'
     } else if (keys.rightArrow.pressed) {
-        p2.velocity.x = p2.interp.update(5);
+        p2.velocity.x = p2.interp.update(playerSpeed);
         p2.lastDirection = 'right'
     } else {
         p2.velocity.x = p2.interp.update(0);
