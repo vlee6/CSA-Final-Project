@@ -24,7 +24,7 @@ class HurtBox {
     update()
     {
         this.player.canAttack = false
-        if (this.elapsedFrames > this.frames.delay && this.elapsedFrames < this.frames.duration + this.frames.delay && !this.attackRegistered) { 
+        if (this.elapsedFrames >= this.frames.delay && this.elapsedFrames < this.frames.duration + this.frames.delay && !this.attackRegistered) {
             this.position.y = this.player.position.y - (this.player.hitbox.height * this.offset.y)        
             switch (this.player.lastDirection) { // Making the hurtbox face the right direction
                 case "right":

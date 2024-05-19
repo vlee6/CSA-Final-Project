@@ -51,10 +51,10 @@ const keys = {
     rightArrow: {
         pressed: false
     },
-    m: {
+    o: {
         pressed: false
     },
-    n: {
+    p: {
         pressed: false
     },
     // 'w' and 'upArrow' are not included since a jump doesn't need to be stopped on key release
@@ -229,23 +229,23 @@ function animate() {
         character1.neutralSpecial({p: p1})
     }
 
-    if (keys.m.pressed && (keys.leftArrow.pressed || keys.rightArrow.pressed) && p2.canAttack) {
+    if (keys.p.pressed && (keys.leftArrow.pressed || keys.rightArrow.pressed) && p2.canAttack) {
         character1.horiBasic({p: p2})
-    } else if (keys.m.pressed && keys.upArrow.pressed && p2.canAttack) {
+    } else if (keys.p.pressed && keys.upArrow.pressed && p2.canAttack) {
         character1.upBasic({p: p2})
-    } else if (keys.m.pressed && keys.downArrow.pressed && p2.canAttack) {
+    } else if (keys.p.pressed && keys.downArrow.pressed && p2.canAttack) {
         character1.downBasic({p: p2})
-    } else if (keys.m.pressed && p2.canAttack) { // Order matters, neutral attacks should be last
+    } else if (keys.p.pressed && p2.canAttack) { // Order matters, neutral attacks should be last
         character1.neutralBasic({p: p2})
     }
 
-    if (keys.n.pressed && keys.upArrow.pressed && p2.canAttack) {
+    if (keys.o.pressed && keys.upArrow.pressed && p2.canAttack) {
         character1.upSpecial({p: p2})
-    } else if (keys.n.pressed && (keys.leftArrow.pressed || keys.rightArrow.pressed) && p2.canAttack) {
+    } else if (keys.o.pressed && (keys.leftArrow.pressed || keys.rightArrow.pressed) && p2.canAttack) {
         character1.horiSpecial({p: p2})
-    } else if (keys.n.pressed && keys.downArrow.pressed && p2.canAttack) {
+    } else if (keys.o.pressed && keys.downArrow.pressed && p2.canAttack) {
         character1.downSpecial({p: p2})
-    } else if (keys.n.pressed && p2.canAttack) { // Order matters, neutral attacks should be last
+    } else if (keys.o.pressed && p2.canAttack) { // Order matters, neutral attacks should be last
         character1.neutralSpecial({p: p2})
     }
     
@@ -289,11 +289,11 @@ window.addEventListener('keydown', (event) => {
         case 'ArrowRight':
             keys.rightArrow.pressed = true
             break
-        case 'm':
-            keys.m.pressed = true
+        case 'p':
+            keys.p.pressed = true
             break
-        case 'n':
-            keys.n.pressed = true
+        case 'o':
+            keys.o.pressed = true
             break
     }
 })
@@ -332,11 +332,11 @@ window.addEventListener('keyup', (event) => {
         case 'ArrowRight':
             keys.rightArrow.pressed = false
             break
-        case 'm':
-            keys.m.pressed = false
+        case 'p':
+            keys.p.pressed = false
             break
-        case 'n':
-            keys.n.pressed = false
+        case 'o':
+            keys.o.pressed = false
             break
     }
 })

@@ -191,10 +191,10 @@ class Player {
             ) {
                 if (attack.player != this) {
                     attack.attackRegistered = true
-                    let xDirection = Math.sign((this.position.x + this.hitbox.width / 2) - (attack.player.position.x + attack.player.hitbox.width / 2))
+                    let xDirection = Math.sign((this.position.x + this.hitbox.width / 2) - (attack.player.position.x + attack.player.hitbox.width / 2)) // Getting the direction of the attack
                     let yDirection = Math.sign((this.position.y + this.hitbox.height / 2.1) - (attack.player.position.y + attack.player.hitbox.height / 2))
                     this.velocity.x = this.interp.update(xDirection * attack.multiplier.x * this.multiplier)
-                    this.velocity.y = yDirection * attack.multiplier.y * this.multiplier
+                    this.velocity.y = yDirection * attack.multiplier.y * (this.multiplier * 0.8) 
                     this.multiplier += (attack.multiplier.x + attack.multiplier.y) / 2 * attack.multiplier.percent * this.multiplier * globalMultiplier
                 }
             }
@@ -253,10 +253,20 @@ class Player {
         // + "\n respawnY: " + this.respawnPosition.y.toFixed(2)
         + "\n playerY: " + this.position.y.toFixed(2)
         + "\n playerX: " + this.position.x.toFixed(2)
+        + "\n direction: " + this.lastDirection
     }
 
     displayPercent({id}) {
         document.getElementById(id).innerHTML = ((this.multiplier - 1) * 100).toFixed(1) + "%"
+    }
+
+    getDirection() {
+        switch (this.lastDirection) {
+            case "left":
+                return -1
+            case "right":
+                return 1
+        }
     }
 
 }
