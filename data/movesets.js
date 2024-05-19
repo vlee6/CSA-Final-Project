@@ -5,7 +5,7 @@ class character1 {
             width: 1,
             height: 0.3,
             frames: {delay: 0, duration: 10, cooldown: 0},
-            multiplier: {x: 30, y: 5, percent: 0.3},
+            multiplier: {x: 5, y: 5, percent: 0.3},
             offset: {x: 1, y: -0.25}
         }))
         activeAttacks.push(new HurtBox({
@@ -20,7 +20,14 @@ class character1 {
     }
 
     static horiBasic({p}) {
-
+        activeAttacks.push(new HurtBox({
+            player: p,
+            width: 1.5,
+            height: 0.5,
+            frames: {delay: 0, duration: 10, cooldown: 5},
+            multiplier: {x: 50, y: 5, percent: 0.5},
+            offset: {x: 1, y: -0.25}
+        }))
     }
 
     static upBasic({p}) {
