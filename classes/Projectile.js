@@ -1,7 +1,6 @@
 class Projectile { // I could make this a subclass but I'm too lazy
     constructor({
         player,
-        target,
         width,
         height,
         frames,
@@ -10,22 +9,20 @@ class Projectile { // I could make this a subclass but I'm too lazy
         collisionBlocks,
     }) {
         this.position = {
-            x: player.hitbox.position.x + player.hitbox.width / 2 - width / 2,
+            x: player.hitbox.position.x + player.hitbox.width / 2 - width / 2, // The spawnpoint of the projectile is in the center of the player
             y: player.hitbox.position.y + player.hitbox.height / 2 - height / 2
         }
         this.player = player
         this.playerY = player.hitbox.position.y + player.hitbox.height / 2 - height / 2
-        this.lastDirection = player.lastDirection
-        this.target = target
+        this.lastDirection = player.getDirection()
         this.width = width
         this.height = height
         this.frames = frames
         this.elapsedFrames = 0
         this.multiplier = multiplier
-        this.attackRegistered = false
-        this.angle = angleBetween({object1: player, object2: target})
         this.speed = speed
         this.collisionBlocks = collisionBlocks
+        this.attackRegistered = false
         this.hasCollided = false
     }
 
@@ -34,15 +31,8 @@ class Projectile { // I could make this a subclass but I'm too lazy
         this.player.canAttack = false
         if (this.elapsedFrames > this.frames.cooldown) { this.player.canAttack = true }
         if (this.elapsedFrames >= this.frames.delay && this.elapsedFrames < this.frames.duration + this.frames.delay && !this.attackRegistered && !this.hasCollided) { 
-            // Projectile is fired, position is continously updated + Math.cos(this.angle) * this.speed + Math.sin(this.angle) * this.speed
-            switch (this.lastDirection) {
-                case "left":
-                    this.position.x -= this.speed
-                    break
-                case "right":
-                    this.position.x += this.speed
-                    break
-            }
+            // Projectile is fired, position is continously updated
+            this.position.x += this.speed * this.lastDirection
             this.position.y = this.playerY
             this.draw()
         } else {

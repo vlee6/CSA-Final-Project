@@ -56,7 +56,6 @@ class character1 {
     static neutralSpecial({p}) {
         activeAttacks.push(new Projectile({
             player: p,
-            target: p2,
             width: 50,
             height: 20,
             frames: {delay: 0, duration: 500, cooldown: 40},
@@ -72,7 +71,7 @@ class character1 {
             width: 1,
             height: 0.5,
             frames: {delay: 5, duration: 5, cooldown: 20},
-            multiplier: {x: 200, y: 7, percent: 0.1},
+            multiplier: {x: 200, y: 10, percent: 0.1},
             offset: {x: 1, y: -0.25}
         }))
     }
@@ -91,7 +90,16 @@ class character1 {
     }
 
     static downSpecial({p}) {
-
+        activeAttacks.push(new WeightedProjecile({
+            player: p,
+            width: 50,
+            height: 50,
+            frames: {delay: 0, duration: 500, cooldown: 40},
+            multiplier: {x: 20, y: -5, percent: 1},
+            maxSpeed: 20,
+            accel: 0.4,
+            collisionBlocks: collisionBlocks.concat(platformCollisionBlocks), // Projectiles will dissapear if they collide with platforms or regular collision blocks
+        }))
     }
     
 }
