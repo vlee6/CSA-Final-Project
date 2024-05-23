@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Azeret+Mono&family=Roboto+Mono&family=Rubik:wght@500&display=swap');
+
+body {
+    font-family: "Roboto Mono";
+    width: 100%;
+    height: 100%;
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    font-size: 3vw;
+}
+
+#menu-container {
+    height: 100vh;
+    padding: 5vh 0vw;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+#menu {
+    display: block;
+    transform: translateX(10vw);
+}
+
+.button {
+    box-sizing: border-box;
+    padding: 2vh 50vw 2vh 2vw;
+    border: 0.4vw solid black;
+    border-radius: 2vw;
+}
+
+.button:hover {
+    transform: translateX(5vw);
+}
