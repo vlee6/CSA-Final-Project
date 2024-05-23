@@ -18,24 +18,20 @@ a {
 
 #menu-container {
     height: 100vh;
-    padding: 5vh 0vw;
+    width: 100vw;
     display: flex;
-    justify-content: right;
+    justify-content: center;
     align-items: center;
 }
 
 #menu {
     display: block;
-    transform: translateX(10vw);
 }
 
 .button {
-    box-sizing: border-box;
-    padding: 2vh 50vw 2vh 2vw;
-    border: 0.4vw solid black;
-    border-radius: 2vw;
+
 }
 
 .button:hover {
-    transform: translateX(5vw);
+    animation-name: in;
 }
