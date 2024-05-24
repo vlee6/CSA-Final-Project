@@ -28,7 +28,7 @@ class WeightedProjecile {
         this.hasCollided = false
         this.velocity = {
             x: 0,
-            y: -5,
+            y: -10,
         }
     }
 
@@ -45,6 +45,9 @@ class WeightedProjecile {
             this.checkForVerticalCollisions()
             this.draw()
             this.lastY = this.position.y 
+
+            this.multiplier.x = Math.abs(this.velocity.x * 2.2) + 5 // The speed of the projectile changes its knockback
+
         } else {
             this.position.y = -99999
         }
@@ -105,7 +108,7 @@ class WeightedProjecile {
     }
 
     applyGravity() {
-        this.velocity.y += gravity
+        this.velocity.y += gravity * 2
         this.position.y += this.velocity.y
     }
 

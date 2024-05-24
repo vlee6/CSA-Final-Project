@@ -5,7 +5,7 @@ class character1 {
             width: 1,
             height: 0.3,
             frames: {delay: 0, duration: 10, cooldown: 0},
-            multiplier: {x: 5, y: 5, percent: 0.3},
+            multiplier: {x: 5, y: 5, percent: 0.6},
             offset: {x: 1, y: -0.25}
         }))
         activeAttacks.push(new HurtBox({
@@ -13,7 +13,7 @@ class character1 {
             width: 1,
             height: 0.3,
             frames: {delay: 15, duration: 10, cooldown: 10},
-            multiplier: {x: 30, y: 5, percent: 0.3},
+            multiplier: {x: 30, y: 5, percent: 0.6},
             offset: {x: 1, y: -0.5}
         }))
         p.interp.update(p.velocity.x + 50 * p.getDirection())
@@ -25,7 +25,7 @@ class character1 {
             width: 1.5,
             height: 0.5,
             frames: {delay: 0, duration: 10, cooldown: 5},
-            multiplier: {x: 50, y: 5, percent: 0.5},
+            multiplier: {x: 70, y: 5, percent: 0.3},
             offset: {x: 1, y: -0.25}
         }))
     }
@@ -36,7 +36,7 @@ class character1 {
             width: 1,
             height: 1,
             frames: {delay: 0, duration: 10, cooldown: 15},
-            multiplier: {x: 5, y: 10, percent: 0.5},
+            multiplier: {x: 5, y: 10, percent: 1.5},
             offset: {x: 0, y: 0.8}
         }))
     }
@@ -47,7 +47,7 @@ class character1 {
             width: 1,
             height: 0.5,
             frames: {delay: 0, duration: 60, cooldown: 10},
-            multiplier: {x: 2, y: 7, percent: 1},
+            multiplier: {x: 2, y: 7, percent: 2.5},
             offset: {x: 0, y: -1.01}
         }))
         p.velocity.y += 5
@@ -58,8 +58,8 @@ class character1 {
             player: p,
             width: 50,
             height: 20,
-            frames: {delay: 0, duration: 500, cooldown: 40},
-            multiplier: {x: 10, y: 5, percent: 2},
+            frames: {delay: 0, duration: 500, cooldown: 30},
+            multiplier: {x: 20, y: 5, percent: 0.3},
             speed: 25,
             collisionBlocks: collisionBlocks.concat(platformCollisionBlocks), // Projectiles will dissapear if they collide with platforms or regular collision blocks
         }))
@@ -84,7 +84,7 @@ class character1 {
             width: 1.5,
             height: 0.7,
             frames: {delay: 0, duration: 20, cooldown: 20},
-            multiplier: {x: 5, y: 5, percent: 0.2},
+            multiplier: {x: 5, y: 5, percent: 1.5},
             offset: {x: -0.25, y: 0.25}
         }))
     }
@@ -94,10 +94,10 @@ class character1 {
             player: p,
             width: 50,
             height: 50,
-            frames: {delay: 0, duration: 500, cooldown: 40},
-            multiplier: {x: 20, y: -5, percent: 1},
-            maxSpeed: 20,
-            accel: 0.4,
+            frames: {delay: 0, duration: 500, cooldown: 60},
+            multiplier: {x: 1, y: -5, percent: 1},
+            maxSpeed: 25,
+            accel: 0.5,
             collisionBlocks: collisionBlocks.concat(platformCollisionBlocks), // Projectiles will dissapear if they collide with platforms or regular collision blocks
         }))
     }

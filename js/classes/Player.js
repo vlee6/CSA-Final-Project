@@ -5,6 +5,7 @@ class Player {
         platformCollisionBlocks,
         color,
         interp,
+        name,
     }) {
         this.position = position
         this.respawnPosition = {
@@ -38,9 +39,30 @@ class Player {
         this.canAttack = true
         this.interp = interp
         this.multiplier = 1
+        this.lives = 3
+        this.name = name
+        this.gameOver = false
     }
 
     update() {
+        if (this.outOfBounds()) { 
+            this.lives--
+            this.position.x = this.respawnPosition.x
+            this.position.y = this.respawnPosition.y
+            this.interp.setAlpha(1)
+            this.interp.update(0)
+            this.velocity.x = 0
+            this.velocity.y = 0
+            this.multiplier = 1
+            if (this.lives <= 0) {
+                gameOver({name: this.name})
+                // this.color = "rgba(255, 255, 255, 0)"
+                this.gameOver = true
+            }
+        }
+        // For some reason, if gameOver isn't a instance variable and the return statement isn't outside of the if statement above, it doesn't work
+        if (this.gameOver) {return false}
+
         // Drawing a rectangle to show where our hitbox is
         c.fillStyle = this.color
         c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height)
@@ -196,6 +218,8 @@ class Player {
                     this.velocity.x = this.interp.update(xDirection * attack.multiplier.x * this.multiplier)
                     this.velocity.y = yDirection * attack.multiplier.y * (this.multiplier * 0.8) 
                     this.multiplier += (attack.multiplier.x + attack.multiplier.y) / 2 * attack.multiplier.percent * this.multiplier * globalMultiplier
+                    if (this.multiplier > 4) { this.multiplier = 4 } // Making sure the multiplier does not exceed 300%
+                    if (this.multiplier < 1) { this.multiplier = 1 } // Making sure the multiplier is not below 0%
                 }
             }
         })
@@ -247,13 +271,14 @@ class Player {
         document.getElementById(id).innerHTML =
         "xVel: " + this.velocity.x.toFixed(2)
         + "\n yVel: " + this.velocity.y.toFixed(2)
-        // + "\n onMaterial: " + this.collisions.vertical
+        + "\n onMaterial: " + this.material
         // + "\n friction: " + horizontalInterp.mAlpha
         // + "\n respawnX: " + this.respawnPosition.x.toFixed(2)
         // + "\n respawnY: " + this.respawnPosition.y.toFixed(2)
         + "\n playerY: " + this.position.y.toFixed(2)
         + "\n playerX: " + this.position.x.toFixed(2)
         + "\n direction: " + this.lastDirection
+        + "\n lives: " + this.lives
     }
 
     displayPercent({id}) {
@@ -267,6 +292,18 @@ class Player {
             case "right":
                 return 1
         }
+    }
+
+    outOfBounds() {
+        let playerX = this.position.x + this.hitbox.width / 2
+        let playerY = this.position.y + this.hitbox.height / 2
+
+        return (
+            playerX < 0 - bounds ||
+            playerX > canvas.width + bounds ||
+            playerY < 0 - bounds ||
+            playerY > canvas.height + bounds
+        )
     }
 
 }

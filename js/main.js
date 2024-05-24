@@ -15,6 +15,7 @@ const friction = { // Lowering these values makes it more "slippery"
     air: 0.1, // Might raise this?
 }
 const playerSpeed = 8
+const bounds = 500
 
 const tileWidth = canvas.width / rowLength
 const tileHeight = tileWidth
@@ -105,6 +106,7 @@ const p1 = new Player({
     platformCollisionBlocks: platformCollisionBlocks,
     color: "rgba(255, 0, 0, 0.8)",
     interp: p1TransInterp,
+    name: "Player 1",
 })
 
 
@@ -117,6 +119,7 @@ const p2 = new Player({
     platformCollisionBlocks: platformCollisionBlocks,
     color: "rgba(0, 0, 255, 0.8)",
     interp: p2TransInterp,
+    name: "Player 2",
 })
 
 const players = [p2]
@@ -340,3 +343,9 @@ window.addEventListener('keyup', (event) => {
             break
     }
 })
+
+function gameOver({name}) {
+    let screen = document.getElementById("game-over-container")
+    screen.style.opacity = "100%"
+    // screen.innerHTML = name + " loses!"
+}
