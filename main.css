@@ -18,7 +18,7 @@ canvas {
     height: 100%;
 }
 
-#stats1 {
+#debugstats1 {
     font-size: 1vw;
     position: absolute;
     top: 0;
@@ -31,7 +31,7 @@ canvas {
     z-index: 100;
 }
 
-#stats2 {
+#debugstats2 {
     font-size: 1vw;
     position: absolute;
     top: 0;
@@ -73,12 +73,42 @@ h3 {
     left: 0;
     width: 100vw;
     height: 100vh;
+    display: none;
+    opacity: 0%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+#game-over-header {
+    width: 100vw;
+    text-align: center;
+    font-size: 5vw;
+}
+
+#stats-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0%;
+    gap: 6vw;
+    margin-bottom: 10vh;
 }
 
-#game-over {
-    font-size: 3vw;
+.stats {
+    display: block;
+    font-size: 2vw;
+    text-align: center;
+    white-space: pre-wrap;
+}
+
+a {
+    display: block;
+    font-size: 2vw;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+    text-decoration: none;
+    padding: 2vh 8vw;
+    border: solid 0.5vw;
+    border-radius: 2vw;
 }

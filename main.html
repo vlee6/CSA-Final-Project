@@ -8,8 +8,8 @@
         <link rel="stylesheet" href="main.css">
     </head>
     <body>
-        <p id="stats1"></p>
-        <p id="stats2"></p>
+        <p id="debugstats1"></p>
+        <p id="debugstats2"></p>
         <canvas></canvas>
 
         <div id="p1" class="player-info">
@@ -22,7 +22,12 @@
         </div>
 
         <div id="game-over-container">
-            <h3 id="game-over">Someone won</h3>
+            <h2 id="game-over-header"></h3>
+            <div id="stats-container">
+                <p id="p1-stats" class="stats"></p>
+                <p id="p2-stats" class="stats"></p>
+            </div>
+            <a href="main.html">Restart</a>
         </div>
 
     </body>

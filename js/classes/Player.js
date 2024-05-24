@@ -42,6 +42,7 @@ class Player {
         this.lives = 3
         this.name = name
         this.gameOver = false
+        this.totalDamageTaken = 0
     }
 
     update() {
@@ -55,7 +56,7 @@ class Player {
             this.velocity.y = 0
             this.multiplier = 1
             if (this.lives <= 0) {
-                gameOver({name: this.name})
+                gameOver({loser: this})
                 // this.color = "rgba(255, 255, 255, 0)"
                 this.gameOver = true
             }
@@ -217,7 +218,9 @@ class Player {
                     let yDirection = Math.sign((this.position.y + this.hitbox.height / 2.1) - (attack.player.position.y + attack.player.hitbox.height / 2))
                     this.velocity.x = this.interp.update(xDirection * attack.multiplier.x * this.multiplier)
                     this.velocity.y = yDirection * attack.multiplier.y * (this.multiplier * 0.8) 
-                    this.multiplier += (attack.multiplier.x + attack.multiplier.y) / 2 * attack.multiplier.percent * this.multiplier * globalMultiplier
+                    let damage = (attack.multiplier.x + attack.multiplier.y) / 2 * attack.multiplier.percent * this.multiplier * globalMultiplier
+                    this.multiplier += damage
+                    this.totalDamageTaken += damage
                     if (this.multiplier > 4) { this.multiplier = 4 } // Making sure the multiplier does not exceed 300%
                     if (this.multiplier < 1) { this.multiplier = 1 } // Making sure the multiplier is not below 0%
                 }
@@ -267,7 +270,7 @@ class Player {
         }
     }
 
-    displayStats({id}) {
+    displayDebugStats({id}) {
         document.getElementById(id).innerHTML =
         "xVel: " + this.velocity.x.toFixed(2)
         + "\n yVel: " + this.velocity.y.toFixed(2)
@@ -304,6 +307,15 @@ class Player {
             playerY < 0 - bounds ||
             playerY > canvas.height + bounds
         )
+    }
+
+    displayStats({id}) {
+        document.getElementById(id).innerHTML =
+
+        "<b>" + this.name + "</b>"
+        + "\n Kills: " + (3 - getOtherPlayer({player: this}).lives)
+        + "\n Deaths: " + (3 - this.lives)
+        + "\n Damage: " + (getOtherPlayer({player: this}).totalDamageTaken * 100).toFixed(2) + "%"
     }
 
 }

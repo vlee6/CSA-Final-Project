@@ -83,7 +83,7 @@ class character1 {
             player: p,
             width: 1.5,
             height: 0.7,
-            frames: {delay: 0, duration: 20, cooldown: 20},
+            frames: {delay: 0, duration: 20, cooldown: 40},
             multiplier: {x: 5, y: 5, percent: 1.5},
             offset: {x: -0.25, y: 0.25}
         }))

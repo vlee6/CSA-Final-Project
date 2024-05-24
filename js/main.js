@@ -100,29 +100,29 @@ const p2TransInterp = new Ewma(friction.ground)
 const p1 = new Player({
     position: {
         x: canvas.width * 1 / 3,
-        y: 0,
+        y: -50,
     },
     collisionBlocks: collisionBlocks,
     platformCollisionBlocks: platformCollisionBlocks,
     color: "rgba(255, 0, 0, 0.8)",
     interp: p1TransInterp,
-    name: "Player 1",
+    name: "Red",
 })
 
 
 const p2 = new Player({
     position: {
         x: canvas.width * 2 / 3 - p1.hitbox.width,
-        y: 0,
+        y: -50,
     },
     collisionBlocks: collisionBlocks,
     platformCollisionBlocks: platformCollisionBlocks,
     color: "rgba(0, 0, 255, 0.8)",
     interp: p2TransInterp,
-    name: "Player 2",
+    name: "Blue",
 })
 
-const players = [p2]
+const players = [p1, p2]
 
 // Store active attacks that each player will iterate through every frame
 let activeAttacks = []
@@ -151,18 +151,25 @@ function animate() {
     p2.update()
 
     // Draw attacks
-    activeAttacks.forEach(attack => {
-        console.log(attack.position.x + ", " + attack.position.y)
-        attack.update()
-    })
+    for (let i = 0; i < activeAttacks.length; i++) {
+        activeAttacks[i].update()
+        if (activeAttacks[i].elapsedFrames > 9999) {
+            activeAttacks.splice(i, 1)
+            i--
+        }
+    }
+
+    // activeAttacks.forEach(attack => {
+    //     attack.update()
+    // })
 
     // Check for attacks
     p1.checkHurtCollision({activeAttacks: activeAttacks})
     p2.checkHurtCollision({activeAttacks: activeAttacks})
 
     // Display text
-    p1.displayStats({id: "stats1"})
-    p2.displayStats({id: "stats2"})
+    p1.displayDebugStats({id: "debugstats1"})
+    p2.displayDebugStats({id: "debugstats2"})
 
     p1.displayPercent({id: "p1-percent"})
     p2.displayPercent({id: "p2-percent"})
@@ -208,8 +215,6 @@ function animate() {
             break
     }
 
-    console.log(activeAttacks)
-
     // User input for attacks
     // TO DO: Figure out how to remove past attacks
     if (keys.r.pressed && (keys.a.pressed || keys.d.pressed) && p1.canAttack) {
@@ -220,9 +225,7 @@ function animate() {
         character1.downBasic({p: p1})
     } else if (keys.r.pressed && p1.canAttack) { // Order matters, neutral attacks should be last
         character1.neutralBasic({p: p1})
-    }
-
-    if (keys.t.pressed && keys.w.pressed && p1.canAttack) {
+    } else if (keys.t.pressed && keys.w.pressed && p1.canAttack) {
         character1.upSpecial({p: p1})
     } else if (keys.t.pressed && (keys.a.pressed || keys.d.pressed) && p1.canAttack) {
         character1.horiSpecial({p: p1})
@@ -240,9 +243,7 @@ function animate() {
         character1.downBasic({p: p2})
     } else if (keys.p.pressed && p2.canAttack) { // Order matters, neutral attacks should be last
         character1.neutralBasic({p: p2})
-    }
-
-    if (keys.o.pressed && keys.upArrow.pressed && p2.canAttack) {
+    } else if (keys.o.pressed && keys.upArrow.pressed && p2.canAttack) {
         character1.upSpecial({p: p2})
     } else if (keys.o.pressed && (keys.leftArrow.pressed || keys.rightArrow.pressed) && p2.canAttack) {
         character1.horiSpecial({p: p2})
@@ -344,8 +345,14 @@ window.addEventListener('keyup', (event) => {
     }
 })
 
-function gameOver({name}) {
+function gameOver({loser}) {
     let screen = document.getElementById("game-over-container")
     screen.style.opacity = "100%"
-    // screen.innerHTML = name + " loses!"
+    screen.style.display = "block"
+    
+    let header = document.getElementById("game-over-header")
+    header.innerHTML = getOtherPlayer(loser).name + " wins!"
+
+    p1.displayStats({id: "p1-stats"})
+    p2.displayStats({id: "p2-stats"})
 }
