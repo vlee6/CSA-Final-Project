@@ -17,21 +17,54 @@ a {
 }
 
 #menu-container {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+
+#menu-container img {
+    display: block;
+    margin: auto;
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+    height: 50%;
+    width: 50%;
 }
 
 #menu {
     display: block;
+    margin: auto;
+    height: fit-content;
+    width: fit-content;
 }
 
-.button {
-
+#star-pattern-gradient {
+    z-index: -99;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 60%, rgba(255,255,255,1) 100%);
 }
 
-.button:hover {
-    animation-name: in;
+#star-pattern {
+    z-index: -999;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("https://assets.codepen.io/1468070/Star+Pattern+3.svg");
+    background-repeat: repeat;
+    background-position: 0 0;
+    filter: invert(10%) contrast(100%);
+    background-size: 10%;
+    animation: pan 60s linear infinite;
+}
+
+@keyframes pan {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 999px 0;
+    }
 }
