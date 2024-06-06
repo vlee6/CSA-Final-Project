@@ -59,7 +59,7 @@ class character1 {
             width: 50,
             height: 20,
             frames: {delay: 0, duration: 500, cooldown: 30},
-            multiplier: {x: 20, y: 5, percent: 0.3},
+            multiplier: {x: 20, y: 5, percent: 1},
             speed: 25,
             collisionBlocks: collisionBlocks.concat(platformCollisionBlocks), // Projectiles will dissapear if they collide with platforms or regular collision blocks
         }))
@@ -77,13 +77,15 @@ class character1 {
     }
 
     static upSpecial({p}) {
-        p.position.y -= 200
-        p.velocity.y = -10
+        p.velocity.y = -20
+        p.interp.setAlpha(friction.air) // Prevent you from going super fast when doing this attack on the ground
+        p.interp.update(p.getDirection() * 200)
+        p.jumps.num = 0
         activeAttacks.push(new HurtBox({
             player: p,
             width: 1.5,
             height: 0.7,
-            frames: {delay: 0, duration: 20, cooldown: 40},
+            frames: {delay: 0, duration: 20, cooldown: 999},
             multiplier: {x: 5, y: 5, percent: 1.5},
             offset: {x: -0.25, y: 0.25}
         }))

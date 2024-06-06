@@ -1,4 +1,4 @@
-class Player {
+class Player extends Sprite {
     constructor({
         position,
         collisionBlocks,
@@ -6,7 +6,12 @@ class Player {
         color,
         interp,
         name,
+        imageSrc,
+        frameRate,
+        scale = 2.5,
+        animations,
     }) {
+        super({imageSrc: imageSrc, frameRate: frameRate, scale: scale})
         this.position = position
         this.respawnPosition = {
             x: position.x,
@@ -23,8 +28,8 @@ class Player {
                 x: this.position.x,
                 y: this.position.y,
             },
-            width: 50,
-            height: 70,
+            width: 45,
+            height: 85,
         }
         this.color = color
         this.jumps = { // Change for double jump or triple jump
@@ -43,6 +48,22 @@ class Player {
         this.name = name
         this.gameOver = false
         this.totalDamageTaken = 0
+
+        this.animations = animations
+        for (let key in this.animations) { // Getting images from our animation, replacing the data in this.animations
+            const image = new Image()
+            image.src = this.animations[key].imageSrc
+            this.animations[key].image = image
+        }
+    }
+
+    switchSprite(key) {
+        if (this.image == this.animations[key].image || !this.loaded) { return } // If we are at the desired image, we don't need to do anything
+
+        this.currentFrame = 0
+        this.image = this.animations[key].image
+        this.frameBuffer = this.animations[key].frameBuffer
+        this.frameRate = this.animations[key].frameRate
     }
 
     update() {
@@ -64,6 +85,8 @@ class Player {
         // For some reason, if gameOver isn't a instance variable and the return statement isn't outside of the if statement above, it doesn't work
         if (this.gameOver) {return false}
 
+        super.update() // Inheirited from the Sprite class
+        
         // Drawing a rectangle to show where our hitbox is
         c.fillStyle = this.color
         c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height)
@@ -82,12 +105,12 @@ class Player {
 
     updateHitbox() {
         this.hitbox = {
-            position: {
-                x: this.position.x,
-                y: this.position.y,
-            },
             width: this.hitbox.width,
             height: this.hitbox.height,
+            position: {
+                x: this.position.x + this.width / 2 - this.hitbox.width / 2,
+                y: this.position.y + 41,
+            },
         }
     }
 

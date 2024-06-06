@@ -14,7 +14,7 @@ const friction = { // Lowering these values makes it more "slippery"
     ground: 0.2,
     air: 0.1, // Might raise this?
 }
-const playerSpeed = 8
+const playerSpeed = 6
 const bounds = 500
 
 const tileWidth = canvas.width / rowLength
@@ -104,22 +104,83 @@ const p1 = new Player({
     },
     collisionBlocks: collisionBlocks,
     platformCollisionBlocks: platformCollisionBlocks,
-    color: "rgba(255, 0, 0, 0.8)",
+    color: "rgba(0, 0, 255, 0.2)",
     interp: p1TransInterp,
-    name: "Red",
+    name: "Blue",
+    imageSrc: "./img/Blue/Idle.png",
+    frameRate: 1,
+    animations: { // It's a dictionary...
+        Idle: {
+            imageSrc: "./img/Blue/Idle.png",
+            frameRate: 1, // The number of frames in the spritesheet
+            frameBuffer: 1, // The speed of the animation
+        },
+        IdleLeft: {
+            imageSrc: "./img/Blue/IdleLeft.png",
+            frameRate: 1,
+            frameBuffer: 1,
+        },
+        Run: {
+            imageSrc: "./img/Blue/Run.png",
+            frameRate: 8,
+            frameBuffer: 5,
+        },
+        RunLeft: {
+            imageSrc: "./img/Blue/RunLeft.png",
+            frameRate: 8,
+            frameBuffer: 5,
+        },
+        NeutralBasic: {
+            imageSrc: "./img/Blue/NeutralBasic.png",
+            frameRate: 4,
+            frameBuffer: 10,
+        },
+        NeutralBasicLeft: {
+            imageSrc: "./img/Blue/NeutralBasicLeft.png",
+            frameRate: 4,
+            frameBuffer: 10,
+        },
+        TranslationalBasic: {
+            imageSrc: "./img/Blue/TranslationalBasic.png",
+            frameRate: 2,
+            frameBuffer: 10,
+        },
+        TranslationalBasicLeft: {
+            imageSrc: "./img/Blue/TranslationalBasicLeft.png",
+            frameRate: 2,
+            frameBuffer: 10,
+        },
+        DownBasic: {
+            imageSrc: "./img/Blue/DownBasic.png",
+            frameRate: 1,
+            frameBuffer: 1,
+        },
+        TranslationalSpecial: {
+            imageSrc: "./img/Blue/TranslationalSpecial.png",
+            frameRate: 10,
+            frameBuffer: 5,
+        },
+        TranslationalSpecialLeft: {
+            imageSrc: "./img/Blue/TranslationalSpecialLeft.png",
+            frameRate: 10,
+            frameBuffer: 5,
+        }
+    }
 })
 
 
 const p2 = new Player({
     position: {
-        x: canvas.width * 2 / 3 - p1.hitbox.width,
+        x: canvas.width * 2 / 3 - p1.hitbox.width * 2.5,
         y: -50,
     },
     collisionBlocks: collisionBlocks,
     platformCollisionBlocks: platformCollisionBlocks,
-    color: "rgba(0, 0, 255, 0.8)",
+    color: "rgba(255, 0, 0, 0.2)",
     interp: p2TransInterp,
-    name: "Blue",
+    name: "Red",
+    imageSrc: "./img/Blue/Idle.png",
+    frameRate: 1,
 })
 
 const players = [p1, p2]
@@ -153,15 +214,11 @@ function animate() {
     // Draw attacks
     for (let i = 0; i < activeAttacks.length; i++) {
         activeAttacks[i].update()
-        if (activeAttacks[i].elapsedFrames > 9999) {
+        if (activeAttacks[i].elapsedFrames > 9999) { // Removing old attacks
             activeAttacks.splice(i, 1)
             i--
         }
     }
-
-    // activeAttacks.forEach(attack => {
-    //     attack.update()
-    // })
 
     // Check for attacks
     p1.checkHurtCollision({activeAttacks: activeAttacks})
@@ -176,25 +233,44 @@ function animate() {
 
 
     // Handling user input for movement
-    if (keys.a.pressed) {
-        p1.velocity.x = p1.interp.update(-playerSpeed);
-        p1.lastDirection = 'left'
-    } else if (keys.d.pressed) {
-        p1.velocity.x = p1.interp.update(playerSpeed);
-        p1.lastDirection = 'right'
+    if (p1.canAttack) {
+        if (keys.a.pressed) {
+            p1.velocity.x = p1.interp.update(-playerSpeed);
+            p1.lastDirection = 'left'
+            p1.switchSprite("RunLeft")
+        } else if (keys.d.pressed) {
+            p1.velocity.x = p1.interp.update(playerSpeed);
+            p1.lastDirection = 'right'
+            p1.switchSprite("Run")
+        } else {
+            p1.velocity.x = p1.interp.update(0);
+            switch (p1.lastDirection) {
+                case "left":
+                    p1.switchSprite("IdleLeft")
+                    break
+                case "right":
+                    p1.switchSprite("Idle")
+                    break
+            }
+        }
     } else {
         p1.velocity.x = p1.interp.update(0);
     }
-
-    if (keys.leftArrow.pressed) {
-        p2.velocity.x = p2.interp.update(-playerSpeed);
-        p2.lastDirection = 'left'
-    } else if (keys.rightArrow.pressed) {
-        p2.velocity.x = p2.interp.update(playerSpeed);
-        p2.lastDirection = 'right'
+    
+    if (p2.canAttack) {
+        if (keys.leftArrow.pressed) {
+            p2.velocity.x = p2.interp.update(-playerSpeed);
+            p2.lastDirection = 'left'
+        } else if (keys.rightArrow.pressed) {
+            p2.velocity.x = p2.interp.update(playerSpeed);
+            p2.lastDirection = 'right'
+        } else {
+            p2.velocity.x = p2.interp.update(0);
+        }
     } else {
         p2.velocity.x = p2.interp.update(0);
     }
+
 
     // Switch the friction of the ground depending on the material a player is standing on
     switch(p1.material) {
@@ -217,25 +293,44 @@ function animate() {
 
     // User input for attacks
     // TO DO: Figure out how to remove past attacks
-    if (keys.r.pressed && (keys.a.pressed || keys.d.pressed) && p1.canAttack) {
+    if (keys.r.pressed && keys.a.pressed && p1.canAttack) {
         character1.horiBasic({p: p1})
+        p1.switchSprite("TranslationalBasicLeft")
+    } else if (keys.r.pressed && keys.d.pressed && p1.canAttack) {
+        character1.horiBasic({p: p1})
+        p1.switchSprite("TranslationalBasic")
     } else if (keys.r.pressed && keys.w.pressed && p1.canAttack) {
         character1.upBasic({p: p1})
     } else if (keys.r.pressed && keys.s.pressed && p1.canAttack) {
         character1.downBasic({p: p1})
+        p1.switchSprite("DownBasic")
     } else if (keys.r.pressed && p1.canAttack) { // Order matters, neutral attacks should be last
         character1.neutralBasic({p: p1})
+        switch (p1.lastDirection) {
+            case "left":
+                p1.switchSprite("NeutralBasicLeft")
+                break
+            case "right":
+                p1.switchSprite("NeutralBasic")
+                break
+        }
     } else if (keys.t.pressed && keys.w.pressed && p1.canAttack) {
         character1.upSpecial({p: p1})
-    } else if (keys.t.pressed && (keys.a.pressed || keys.d.pressed) && p1.canAttack) {
+    } else if (keys.t.pressed && keys.a.pressed && p1.canAttack) {
         character1.horiSpecial({p: p1})
+        p1.switchSprite("TranslationalSpecialLeft")
+    } else if (keys.t.pressed && keys.d.pressed && p1.canAttack) {
+        character1.horiSpecial({p: p1})
+        p1.switchSprite("TranslationalSpecial")
     } else if (keys.t.pressed && keys.s.pressed && p1.canAttack) {
         character1.downSpecial({p: p1})
     } else if (keys.t.pressed && p1.canAttack) { // Order matters, neutral attacks should be last
         character1.neutralSpecial({p: p1})
     }
 
-    if (keys.p.pressed && (keys.leftArrow.pressed || keys.rightArrow.pressed) && p2.canAttack) {
+    if (keys.p.pressed && keys.leftArrow.pressed && p2.canAttack) {
+        character1.horiBasic({p: p2})
+    } else if (keys.p.pressed && keys.rightArrow.pressed && p2.canAttack) {
         character1.horiBasic({p: p2})
     } else if (keys.p.pressed && keys.upArrow.pressed && p2.canAttack) {
         character1.upBasic({p: p2})
@@ -245,7 +340,9 @@ function animate() {
         character1.neutralBasic({p: p2})
     } else if (keys.o.pressed && keys.upArrow.pressed && p2.canAttack) {
         character1.upSpecial({p: p2})
-    } else if (keys.o.pressed && (keys.leftArrow.pressed || keys.rightArrow.pressed) && p2.canAttack) {
+    } else if (keys.o.pressed && keys.leftArrow.pressed && p2.canAttack) {
+        character1.horiSpecial({p: p2})
+    } else if (keys.o.pressed && keys.rightArrow.pressed && p2.canAttack) {
         character1.horiSpecial({p: p2})
     } else if (keys.o.pressed && keys.downArrow.pressed && p2.canAttack) {
         character1.downSpecial({p: p2})
