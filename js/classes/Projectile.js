@@ -49,7 +49,7 @@ class Projectile { // I could make this a subclass but I'm too lazy
     }
 
     draw() {
-        c.fillStyle = 'rgba(186, 186, 186, 1)'
+        c.fillStyle = 'rgba(255, 255, 153, 1)'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 
