@@ -348,7 +348,7 @@ function animate() {
                         p1.switchSprite("Fall")
                         break
                 }
-            } else if (p1.velocity.y < 0 && p1.canAttack) {
+            } else if (p1.velocity.y <= 0 && p1.canAttack) {
                 switch (p1.lastDirection) {
                     case "left":
                         p1.switchSprite("JumpLeft")
