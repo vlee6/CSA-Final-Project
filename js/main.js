@@ -157,12 +157,12 @@ const p1 = new Player({
         },
         UpBasic: {
             imageSrc: "./img/Blue/UpBasic.png",
-            frameRate: 5,
+            frameRate: 4,
             frameBuffer: 4,
         },
         UpBasicLeft: {
             imageSrc: "./img/Blue/UpBasicLeft.png",
-            frameRate: 5,
+            frameRate: 4,
             frameBuffer: 4,
         },
         NeutralSpecial: {
