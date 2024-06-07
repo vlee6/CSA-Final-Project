@@ -99,8 +99,8 @@ const p2TransInterp = new Ewma(friction.ground)
 
 const p1 = new Player({
     position: {
-        x: canvas.width * 1 / 4,
-        y: -50,
+        x: canvas.width * 1 / 4 - 50,
+        y: -150,
     },
     collisionBlocks: collisionBlocks,
     platformCollisionBlocks: platformCollisionBlocks,
@@ -231,8 +231,8 @@ const p1 = new Player({
 
 const p2 = new Player({
     position: {
-        x: canvas.width * 2 / 4,
-        y: -50,
+        x: canvas.width * 2 / 4 - p1.image.width / 2,
+        y: -150,
     },
     collisionBlocks: collisionBlocks,
     platformCollisionBlocks: platformCollisionBlocks,
