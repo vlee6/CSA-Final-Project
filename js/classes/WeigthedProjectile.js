@@ -28,7 +28,7 @@ class WeightedProjecile extends Sprite{
         this.hasCollided = false
         this.velocity = {
             x: 0,
-            y: -10,
+            y: -2,
         }
     }
 
