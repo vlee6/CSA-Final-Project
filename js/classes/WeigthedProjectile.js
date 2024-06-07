@@ -12,10 +12,10 @@ class WeightedProjecile extends Sprite{
     }) {
         super({imageSrc: imageSrc, frameRate: frameRate, scale: scale})
         this.position = {
-            x: player.position.x + player.width / 2 +  player.hitbox.width / 2 - this.image.width / 2, // The spawnpoint of the projectile is in the center of the player
-            y: player.position.y + player.height / 2 + player.hitbox.height / 2 - this.image.height / 2 - 10
+            x: player.position.x + player.width / 2 + player.hitbox.width / 2 - this.image.width / 4, // The spawnpoint of the projectile is in the center of the player
+            y: player.position.y + player.height - this.image.height / 2
         }
-        this.lastY = this.position.y
+        this.lastY = player.position.y + player.height - this.image.height / 2
         this.player = player
         this.lastDirection = player.getDirection()
         this.frames = frames
@@ -28,7 +28,7 @@ class WeightedProjecile extends Sprite{
         this.hasCollided = false
         this.velocity = {
             x: 0,
-            y: -2,
+            y: 0,
         }
     }
 
@@ -38,9 +38,9 @@ class WeightedProjecile extends Sprite{
         if (this.elapsedFrames >= this.frames.delay && this.elapsedFrames < this.frames.duration + this.frames.delay && !this.attackRegistered) { 
             // Projectile is fired, position is continously updated
             if (Math.abs(this.velocity.x) < this.maxSpeed) { this.velocity.x += this.accel * this.lastDirection}
+            this.position.y = this.lastY
             this.position.x += this.velocity.x
             this.checkForHorizontalCollisions()
-            this.position.y = this.lastY
             this.applyGravity()
             this.checkForVerticalCollisions()
             this.draw()

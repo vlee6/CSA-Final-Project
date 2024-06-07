@@ -86,8 +86,8 @@ platformCollisions2D.forEach((row, y) => {
                     x: x * tileWidth,
                     y: y * tileHeight,
                 },
-                color: 'rgba(30, 30, 30, 1)',
-                height: tileHeight * 0.5, // Platform collision blocks are slimmer than normal blocks (just to visually show their difference)
+                color: 'rgba(30, 30, 30, 0.5)',
+                height: tileHeight, // Platform collision blocks are slimmer than normal blocks (just to visually show their difference)
             }))
         }
     })
