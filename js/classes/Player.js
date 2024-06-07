@@ -8,7 +8,7 @@ class Player extends Sprite {
         name,
         imageSrc,
         frameRate,
-        scale = 2.5,
+        scale = 3,
         animations,
     }) {
         super({imageSrc: imageSrc, frameRate: frameRate, scale: scale})
@@ -29,7 +29,7 @@ class Player extends Sprite {
                 y: this.position.y,
             },
             width: 45,
-            height: 85,
+            height: 100,
         }
         this.color = color
         this.jumps = { // Change for double jump or triple jump
@@ -88,8 +88,8 @@ class Player extends Sprite {
         super.update() // Inheirited from the Sprite class
         
         // Drawing a rectangle to show where our hitbox is
-        c.fillStyle = this.color
-        c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height)
+        // c.fillStyle = this.color
+        // c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height)
 
         this.position.x += this.velocity.x
 
@@ -109,7 +109,7 @@ class Player extends Sprite {
             height: this.hitbox.height,
             position: {
                 x: this.position.x + this.width / 2 - this.hitbox.width / 2,
-                y: this.position.y + 41,
+                y: this.position.y + 139, // Arbitrary offest to get sprite's feet on the ground
             },
         }
     }
@@ -309,6 +309,10 @@ class Player extends Sprite {
 
     displayPercent({id}) {
         document.getElementById(id).innerHTML = ((this.multiplier - 1) * 100).toFixed(1) + "%"
+    }
+
+    displayLives({id}) {
+        document.getElementById(id).innerHTML = "Lives: " + this.lives
     }
 
     getDirection() {

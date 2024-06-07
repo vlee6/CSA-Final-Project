@@ -71,7 +71,7 @@ blockCollisions2D.forEach((row, y) => {
                     x: x * tileWidth,
                     y: y * tileHeight,
                 },
-                color: 'rgba(0, 255, 0, 0.5)',
+                color: 'rgba(30, 30, 30, 1)',
             }))
         }
     })
@@ -86,8 +86,8 @@ platformCollisions2D.forEach((row, y) => {
                     x: x * tileWidth,
                     y: y * tileHeight,
                 },
-                color: 'rgba(0, 255, 0, 0.3)',
-                height: tileHeight * 1, // Platform collision blocks are slimmer than normal blocks (just to visually show their difference)
+                color: 'rgba(30, 30, 30, 1)',
+                height: tileHeight * 0.5, // Platform collision blocks are slimmer than normal blocks (just to visually show their difference)
             }))
         }
     })
@@ -99,7 +99,7 @@ const p2TransInterp = new Ewma(friction.ground)
 
 const p1 = new Player({
     position: {
-        x: canvas.width * 1 / 3,
+        x: canvas.width * 1 / 4,
         y: -50,
     },
     collisionBlocks: collisionBlocks,
@@ -123,12 +123,12 @@ const p1 = new Player({
         Run: {
             imageSrc: "./img/Blue/Run.png",
             frameRate: 8,
-            frameBuffer: 5,
+            frameBuffer: 4,
         },
         RunLeft: {
             imageSrc: "./img/Blue/RunLeft.png",
             frameRate: 8,
-            frameBuffer: 5,
+            frameBuffer: 4,
         },
         NeutralBasic: {
             imageSrc: "./img/Blue/NeutralBasic.png",
@@ -142,18 +142,58 @@ const p1 = new Player({
         },
         TranslationalBasic: {
             imageSrc: "./img/Blue/TranslationalBasic.png",
-            frameRate: 2,
+            frameRate: 3,
             frameBuffer: 10,
         },
         TranslationalBasicLeft: {
             imageSrc: "./img/Blue/TranslationalBasicLeft.png",
-            frameRate: 2,
+            frameRate: 3,
             frameBuffer: 10,
         },
         DownBasic: {
             imageSrc: "./img/Blue/DownBasic.png",
             frameRate: 1,
             frameBuffer: 1,
+        },
+        UpBasic: {
+            imageSrc: "./img/Blue/UpBasic.png",
+            frameRate: 5,
+            frameBuffer: 4,
+        },
+        UpBasicLeft: {
+            imageSrc: "./img/Blue/UpBasicLeft.png",
+            frameRate: 5,
+            frameBuffer: 4,
+        },
+        NeutralSpecial: {
+            imageSrc: "./img/Blue/NeutralSpecial.png",
+            frameRate: 5,
+            frameBuffer: 4,
+        },
+        NeutralSpecialLeft: {
+            imageSrc: "./img/Blue/NeutralSpecialLeft.png",
+            frameRate: 5,
+            frameBuffer: 4,
+        },
+        DownSpecial: {
+            imageSrc: "./img/Blue/DownSpecial.png",
+            frameRate: 1,
+            frameBuffer: 1,
+        },
+        DownSpecialLeft: {
+            imageSrc: "./img/Blue/DownSpecialLeft.png",
+            frameRate: 1,
+            frameBuffer: 1,
+        },
+        UpSpecial: {
+            imageSrc: "./img/Blue/UpSpecial.png",
+            frameRate: 13,
+            frameBuffer: 4,
+        },
+        UpSpecialLeft: {
+            imageSrc: "./img/Blue/UpSpecialLeft.png",
+            frameRate: 13,
+            frameBuffer: 4,
         },
         TranslationalSpecial: {
             imageSrc: "./img/Blue/TranslationalSpecial.png",
@@ -164,14 +204,34 @@ const p1 = new Player({
             imageSrc: "./img/Blue/TranslationalSpecialLeft.png",
             frameRate: 10,
             frameBuffer: 5,
-        }
+        },
+        Fall: {
+            imageSrc: "./img/Blue/Fall.png",
+            frameRate: 1,
+            frameBuffer: 1,
+        },
+        FallLeft: {
+            imageSrc: "./img/Blue/FallLeft.png",
+            frameRate: 1,
+            frameBuffer: 1,
+        },
+        Jump: {
+            imageSrc: "./img/Blue/Jump.png",
+            frameRate: 1,
+            frameBuffer: 1,
+        },
+        JumpLeft: {
+            imageSrc: "./img/Blue/JumpLeft.png",
+            frameRate: 1,
+            frameBuffer: 1,
+        },
     }
 })
 
 
 const p2 = new Player({
     position: {
-        x: canvas.width * 2 / 3 - p1.hitbox.width * 2.5,
+        x: canvas.width * 2 / 4,
         y: -50,
     },
     collisionBlocks: collisionBlocks,
@@ -179,7 +239,7 @@ const p2 = new Player({
     color: "rgba(255, 0, 0, 0.2)",
     interp: p2TransInterp,
     name: "Red",
-    imageSrc: "./img/Blue/Idle.png",
+    imageSrc: "./img/Sandbag.png",
     frameRate: 1,
 })
 
@@ -230,7 +290,9 @@ function animate() {
 
     p1.displayPercent({id: "p1-percent"})
     p2.displayPercent({id: "p2-percent"})
-
+    
+    p1.displayLives({id: "p1-lives"})
+    p2.displayLives({id: "p2-lives"})
 
     // Handling user input for movement
     if (p1.canAttack) {
@@ -276,6 +338,27 @@ function animate() {
     switch(p1.material) {
         case 'air':
             p1TransInterp.setAlpha(friction.air)
+            
+            if (p1.velocity.y > 0 && p1.canAttack) {
+                switch (p1.lastDirection) {
+                    case "left":
+                        p1.switchSprite("FallLeft")
+                        break
+                    case "right":
+                        p1.switchSprite("Fall")
+                        break
+                }
+            } else if (p1.velocity.y < 0 && p1.canAttack) {
+                switch (p1.lastDirection) {
+                    case "left":
+                        p1.switchSprite("JumpLeft")
+                        break
+                    case "right":
+                        p1.switchSprite("Jump")
+                        break
+                }
+            }
+
             break
         case 'ground':
             p1TransInterp.setAlpha(friction.ground)
@@ -301,6 +384,14 @@ function animate() {
         p1.switchSprite("TranslationalBasic")
     } else if (keys.r.pressed && keys.w.pressed && p1.canAttack) {
         character1.upBasic({p: p1})
+        switch (p1.lastDirection) {
+            case "left":
+                p1.switchSprite("UpBasicLeft")
+                break
+            case "right":
+                p1.switchSprite("UpBasic")
+                break
+        }
     } else if (keys.r.pressed && keys.s.pressed && p1.canAttack) {
         character1.downBasic({p: p1})
         p1.switchSprite("DownBasic")
@@ -316,6 +407,14 @@ function animate() {
         }
     } else if (keys.t.pressed && keys.w.pressed && p1.canAttack) {
         character1.upSpecial({p: p1})
+        switch (p1.lastDirection) {
+            case "left":
+                p1.switchSprite("UpSpecialLeft")
+                break
+            case "right":
+                p1.switchSprite("UpSpecial")
+                break
+        }
     } else if (keys.t.pressed && keys.a.pressed && p1.canAttack) {
         character1.horiSpecial({p: p1})
         p1.switchSprite("TranslationalSpecialLeft")
@@ -324,8 +423,24 @@ function animate() {
         p1.switchSprite("TranslationalSpecial")
     } else if (keys.t.pressed && keys.s.pressed && p1.canAttack) {
         character1.downSpecial({p: p1})
+        switch (p1.lastDirection) {
+            case "left":
+                p1.switchSprite("DownSpecialLeft")
+                break
+            case "right":
+                p1.switchSprite("DownSpecial")
+                break
+        }
     } else if (keys.t.pressed && p1.canAttack) { // Order matters, neutral attacks should be last
         character1.neutralSpecial({p: p1})
+        switch (p1.lastDirection) {
+            case "left":
+                p1.switchSprite("NeutralSpecialLeft")
+                break
+            case "right":
+                p1.switchSprite("NeutralSpecial")
+                break
+        }
     }
 
     if (keys.p.pressed && keys.leftArrow.pressed && p2.canAttack) {
@@ -453,3 +568,6 @@ function gameOver({loser}) {
     p1.displayStats({id: "p1-stats"})
     p2.displayStats({id: "p2-stats"})
 }
+
+// Make sure pixel art isn't blurry
+c.imageSmoothingEnabled = false

@@ -8,6 +8,7 @@ body {
     padding: 0%;
     box-sizing: border-box;
     overflow: hidden;
+    color: white;
 }
 
 canvas {
@@ -30,6 +31,7 @@ canvas {
     white-space: pre-line;
     opacity: 50%;
     z-index: 100;
+    color: darkgray;
 }
 
 #debugstats2 {
@@ -44,27 +46,50 @@ canvas {
     opacity: 50%;
     z-index: 100;
     text-align: right;
+    color: darkgray;
+}
+
+#player-info-container {
+    display: flex;
+    gap: 10vw;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 h3 {
-    font-size: 5vw;
+    font-size: 4vw;
     line-height: 0vw;
 }
 
 .player-info {
     display: block;
-    position: absolute;
-    top: 75%;
     justify-content: center;
     text-align: center;
 }
 
+.player-info p {
+    font-size: 1.5vw;
+    line-height: 1vw;
+}
+
+#p1-lives {
+    font-size: 1vw;
+    font-style: italic;
+}
+
+#p2-lives {
+    font-size: 1vw;
+    font-style: italic;
+}
+
 #p1 {
-    left: 20%;
+    left: 35%;
 }
 
 #p2 {
-    left: 70%;
+    left: 55%;
 }
 
 #game-over-container {
@@ -76,7 +101,7 @@ h3 {
     height: 100vh;
     display: none;
     opacity: 0%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     color: white;
 }
 

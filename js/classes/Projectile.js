@@ -33,7 +33,7 @@ class Projectile { // I could make this a subclass but I'm too lazy
         if (this.elapsedFrames >= this.frames.delay && this.elapsedFrames < this.frames.duration + this.frames.delay && !this.attackRegistered && !this.hasCollided) { 
             // Projectile is fired, position is continously updated
             this.position.x += this.speed * this.lastDirection
-            this.position.y = this.playerY
+            this.position.y = this.playerY - 15 // Offset to get to finger
             this.draw()
         } else {
             this.position.y = -99999
@@ -49,7 +49,7 @@ class Projectile { // I could make this a subclass but I'm too lazy
     }
 
     draw() {
-        c.fillStyle = 'rgba(255, 165, 0, 0.5)'
+        c.fillStyle = 'rgba(186, 186, 186, 1)'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 

@@ -1,23 +1,23 @@
-class WeightedProjecile {
+class WeightedProjecile extends Sprite{
     constructor({
         player,
-        width,
-        height,
         frames,
         multiplier,
         accel,
         maxSpeed,
         collisionBlocks,
+        imageSrc,
+        frameRate,
+        scale,
     }) {
+        super({imageSrc: imageSrc, frameRate: frameRate, scale: scale})
         this.position = {
-            x: player.hitbox.position.x + player.hitbox.width / 2 - width / 2, // The spawnpoint of the projectile is in the center of the player
-            y: player.hitbox.position.y + player.hitbox.height / 2 - height / 2
+            x: player.position.x + player.width / 2 +  player.hitbox.width / 2 - this.image.width / 2, // The spawnpoint of the projectile is in the center of the player
+            y: player.position.y + player.height / 2 + player.hitbox.height / 2 - this.image.height / 2 - 10
         }
         this.lastY = this.position.y
         this.player = player
         this.lastDirection = player.getDirection()
-        this.width = width
-        this.height = height
         this.frames = frames
         this.elapsedFrames = 0
         this.multiplier = multiplier
@@ -46,7 +46,10 @@ class WeightedProjecile {
             this.draw()
             this.lastY = this.position.y 
 
-            this.multiplier.x = Math.abs(this.velocity.x * 2.2) + 5 // The speed of the projectile changes its knockback
+            this.multiplier.x = Math.abs(this.velocity.x * 5) + 5 // The speed of the projectile changes its knockback
+
+            // c.fillStyle = 'rgba(255, 165, 50, 0.5)'
+            // c.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         } else {
             this.position.y = -99999
@@ -110,10 +113,5 @@ class WeightedProjecile {
     applyGravity() {
         this.velocity.y += gravity * 2
         this.position.y += this.velocity.y
-    }
-
-    draw() {
-        c.fillStyle = 'rgba(255, 165, 50, 0.5)'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }

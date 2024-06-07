@@ -30,16 +30,16 @@ class HurtBox {
         }
 
         if (this.elapsedFrames >= this.frames.delay && this.elapsedFrames < this.frames.duration + this.frames.delay && !this.attackRegistered) {
-            this.position.y = this.player.position.y - (this.player.hitbox.height * this.offset.y)        
-            switch (this.player.lastDirection) { // Making the hurtbox face the right direction
+            this.position.y = this.player.position.y + (this.player.height / 2) - (this.player.hitbox.height * this.offset.y)        
+            switch (this.player.lastDirection) { // Making the hurtbox face the right direction   
                 case "right":
-                    this.position.x = this.player.position.x + (this.player.hitbox.width * this.offset.x)
+                    this.position.x = this.player.position.x + this.player.width / 2 - this.player.hitbox.width / 2 + (this.player.hitbox.width * this.offset.x)
                     break
                 case "left":
-                    this.position.x = this.player.position.x - (this.width - this.player.hitbox.width) - (this.player.hitbox.width * this.offset.x) // Some very confusing math to mirror the attack
+                    this.position.x = this.player.position.x + this.player.width / 2 + this.player.hitbox.width / 2 - this.width - (this.player.hitbox.width * this.offset.x)
                     break
             }
-            this.draw()
+            // this.draw() // Display boxes for debugging
         } else {
             this.position.y = -99999 // Obscuring the hurtbox once the attack is over (probably gonna be an issue later)
             if (this.elapsedFrames > this.frames.cooldown + this.frames.duration + this.frames.delay) {
