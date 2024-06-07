@@ -109,7 +109,7 @@ class character1 {
             collisionBlocks: collisionBlocks.concat(platformCollisionBlocks), // Projectiles will dissapear if they collide with platforms or regular collision blocks
             imageSrc: image,
             frameRate: 1,
-            scale: 0.5,
+            scale: 0.4,
         }))
     }
     
